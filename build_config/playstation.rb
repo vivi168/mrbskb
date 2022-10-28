@@ -59,6 +59,11 @@ MRuby::CrossBuild.new("playstation") do |conf|
     linker.library_paths << ["#{PSYQ_PATH}/lib"]
   end
 
+  conf.archiver do |archiver|
+    archiver.command = "mipsel-none-elf-ar"
+    archiver.archive_options = 'rcs "%{outfile}" %{objs}'
+  end
+
   # No executables
   conf.bins = []
 
