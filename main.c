@@ -1,0 +1,105 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <libcd.h>
+
+#include "header.h"
+
+#include "renderer.h"
+#include "level.h"
+#include "input.h"
+
+#include <mruby.h>
+#include <mruby/compile.h>
+
+#define HEAP_SIZE (1024 * 1024)
+char heap[HEAP_SIZE];
+
+Level level;
+
+void process_input()
+{
+    if (iptm_quit_requested() || iptm_is_pressed(KEY_QUIT)) {
+        printf("[INFO]: quit requested\n");
+    }
+
+    if (iptm_is_pressed(KEY_UP)) {
+        if (lvl_move_player(&level, DIR_UP)) level.steps++;
+    }
+    else if (iptm_is_pressed(KEY_DOWN)) {
+        if (lvl_move_player(&level, DIR_DOWN)) level.steps++;
+    }
+    else if (iptm_is_pressed(KEY_LEFT)) {
+        if (lvl_move_player(&level, DIR_LEFT)) level.steps++;
+    }
+    else if (iptm_is_pressed(KEY_RIGHT)) {
+        if (lvl_move_player(&level, DIR_RIGHT)) level.steps++;
+    }
+
+    if (iptm_is_pressed(KEY_RESTART)) {
+        lvl_reset(&level);
+    }
+}
+
+void mainloop()
+{
+    unsigned int frame_start;
+
+    while (1) {
+        frame_start = rdr_getticks();
+
+        iptm_poll_events();
+        process_input();
+        lvl_check_level_done(&level);
+
+        rdr_render(&level);
+        rdr_delay(frame_start);
+    }
+}
+
+static mrb_value mrb_f_foobar(mrb_state *mrb, mrb_value self)
+{
+    mrb_int i;
+
+    mrb_get_args(mrb, "i", &i);
+
+    return mrb_fixnum_value(i);
+}
+
+void mrb_helper_init(mrb_state *mrb)
+{
+    mrb_define_method(mrb, mrb->kernel_module, "foobar", mrb_f_foobar, MRB_ARGS_REQ(1));
+}
+
+int main(int argc, char** argv)
+{
+    mrb_state *mrb;
+    mrb_value v;
+    char code[] = "a = [1, 2, 3, 4, 5]; a.size * foobar(5)";
+
+    InitHeap((void*)&heap, HEAP_SIZE);
+    CdInit();
+
+    rdr_init();
+    iptm_init();
+
+    printf("[INFO]: init done !\n");
+
+    lvl_init(&level, 0);
+    printf("[INFO]: level init done !\n");
+
+    //----
+
+    mrb = mrb_open();
+    mrb_helper_init(mrb);
+    v = mrb_load_string(mrb, code);
+
+    printf("EXECUTING MRUBY ON PSX : %d\n", mrb_fixnum(v));
+
+    //----
+
+    mainloop();
+
+    rdr_cleanup();
+
+    return 0;
+}

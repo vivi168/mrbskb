@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The above element is not required, but it doesn't hurt to have it -->
+
+<!-- To build an ISO image from this XML file, simply run MKPSXISO in -->
+<!-- the command line with this file as the first argument: -->
+
+<!-- mkpsxiso mkpsxiso-sample.xml -->
+
+<!-- The following element defines an ISO project -->
+<!-- Attribute names should be pretty self-explanatory -->
+<!-- Cue sheet is not required if CD audio tracks are not defined -->
+<iso_project image_name="sokoban.bin" cue_sheet="sokoban.cue">
+
+  <!-- This track element defines a track on the CD image, -->
+  <!-- whether it is a data track or an audio track. -->
+  <!-- For this tutorial, only a single data track will be defined. -->
+  <track type="data">
+
+    <!-- The following element defines some identifiers to the disc -->
+    <!-- image. The first two identifiers are mandatory and must -->
+    <!-- always contain the text PLAYSTATION. All other identifiers -->
+    <!-- are optional and can be modified. -->
+    <identifiers
+      system      ="PLAYSTATION"
+      application ="PLAYSTATION"
+      volume      ="SOKOBAN"
+      volume_set  ="SOKOBAN"
+      publisher   ="VIVI168"
+      copyright   ="COPYLEFT"
+    />
+
+    <!-- The following element defines the license file to inject -->
+    <!-- into the disc image, which is required on some earlier -->
+    <!-- console revisions that check the license data area, -->
+    <!-- but you still need a modchip to boot CD-Rs on all consoles. -->
+    <!-- MKPSXISO expects the raw .DAT files found in the PsyQ -->
+    <!-- SDK directory in PS\CDGEN\LCNSFILE. This is optional if you -->
+    <!-- intend to run this sample in emulators. -->
+    <!-- <license file="LICENSEJ.DAT" /> -->
+
+    <!-- This element defines the contents and directory structure -->
+    <!-- of the disc image. For this tutorial no directories will be -->
+    <!-- defined and only a .CNF file and the program executable are -->
+    <!-- included into the CD. -->
+    <directory_tree>
+
+      <!-- The file element defines a file to be included into the -->
+      <!-- disc image. As you can see, the source file can be -->
+      <!-- renamed with the name attribute. -->
+      <file name="SYSTEM.CNF" type="data" source="SYSTEM.TXT"/>
+
+      <!-- For this element, the source attribute can be omitted -->
+      <!-- provided the name attribute is defined. -->
+      <file name="MAIN.EXE" type="data"/>
+      <file name="SKB16.TIM" type="data"/>
+
+      <dir name = "LEVELS">
+        <file name="LEVEL01.TXT" type="data" source="levels/level01.txt"/>
+        <file name="LEVEL02.TXT" type="data" source="levels/level02.txt"/>
+        <file name="LEVEL03.TXT" type="data" source="levels/level03.txt"/>
+        <file name="LEVEL04.TXT" type="data" source="levels/level04.txt"/>
+        <file name="LEVEL05.TXT" type="data" source="levels/level05.txt"/>
+        <file name="LEVEL06.TXT" type="data" source="levels/level06.txt"/>
+        <file name="LEVEL07.TXT" type="data" source="levels/level07.txt"/>
+        <file name="LEVEL08.TXT" type="data" source="levels/level08.txt"/>
+        <file name="LEVEL09.TXT" type="data" source="levels/level09.txt"/>
+        <file name="LEVEL10.TXT" type="data" source="levels/level10.txt"/>
+        <file name="LEVEL11.TXT" type="data" source="levels/level11.txt"/>
+        <file name="LEVEL12.TXT" type="data" source="levels/level12.txt"/>
+        <file name="LEVEL13.TXT" type="data" source="levels/level13.txt"/>
+        <file name="LEVEL14.TXT" type="data" source="levels/level14.txt"/>
+        <file name="LEVEL15.TXT" type="data" source="levels/level15.txt"/>
+        <file name="LEVEL16.TXT" type="data" source="levels/level16.txt"/>
+        <file name="LEVEL17.TXT" type="data" source="levels/level17.txt"/>
+        <file name="LEVEL18.TXT" type="data" source="levels/level18.txt"/>
+        <file name="LEVEL19.TXT" type="data" source="levels/level19.txt"/>
+        <file name="LEVEL20.TXT" type="data" source="levels/level20.txt"/>
+        <file name="LEVEL21.TXT" type="data" source="levels/level21.txt"/>
+        <file name="LEVEL22.TXT" type="data" source="levels/level22.txt"/>
+        <file name="LEVEL23.TXT" type="data" source="levels/level23.txt"/>
+        <file name="LEVEL24.TXT" type="data" source="levels/level24.txt"/>
+        <file name="LEVEL25.TXT" type="data" source="levels/level25.txt"/>
+        <file name="LEVEL26.TXT" type="data" source="levels/level26.txt"/>
+        <file name="LEVEL27.TXT" type="data" source="levels/level27.txt"/>
+        <file name="LEVEL28.TXT" type="data" source="levels/level28.txt"/>
+        <file name="LEVEL29.TXT" type="data" source="levels/level29.txt"/>
+        <file name="LEVEL30.TXT" type="data" source="levels/level30.txt"/>
+        <file name="LEVEL31.TXT" type="data" source="levels/level31.txt"/>
+        <file name="LEVEL32.TXT" type="data" source="levels/level32.txt"/>
+        <file name="LEVEL33.TXT" type="data" source="levels/level33.txt"/>
+        <file name="LEVEL34.TXT" type="data" source="levels/level34.txt"/>
+        <file name="LEVEL35.TXT" type="data" source="levels/level35.txt"/>
+        <file name="LEVEL36.TXT" type="data" source="levels/level36.txt"/>
+        <file name="LEVEL37.TXT" type="data" source="levels/level37.txt"/>
+        <file name="LEVEL38.TXT" type="data" source="levels/level38.txt"/>
+        <file name="LEVEL39.TXT" type="data" source="levels/level39.txt"/>
+        <file name="LEVEL40.TXT" type="data" source="levels/level40.txt"/>
+        <file name="LEVEL41.TXT" type="data" source="levels/level41.txt"/>
+        <file name="LEVEL42.TXT" type="data" source="levels/level42.txt"/>
+        <file name="LEVEL43.TXT" type="data" source="levels/level43.txt"/>
+        <file name="LEVEL44.TXT" type="data" source="levels/level44.txt"/>
+        <file name="LEVEL45.TXT" type="data" source="levels/level45.txt"/>
+        <file name="LEVEL46.TXT" type="data" source="levels/level46.txt"/>
+        <file name="LEVEL47.TXT" type="data" source="levels/level47.txt"/>
+        <file name="LEVEL48.TXT" type="data" source="levels/level48.txt"/>
+        <file name="LEVEL49.TXT" type="data" source="levels/level49.txt"/>
+        <file name="LEVEL50.TXT" type="data" source="levels/level50.txt"/>
+        <file name="LEVEL51.TXT" type="data" source="levels/level51.txt"/>
+        <file name="LEVEL52.TXT" type="data" source="levels/level52.txt"/>
+        <file name="LEVEL53.TXT" type="data" source="levels/level53.txt"/>
+        <file name="LEVEL54.TXT" type="data" source="levels/level54.txt"/>
+        <file name="LEVEL55.TXT" type="data" source="levels/level55.txt"/>
+        <file name="LEVEL56.TXT" type="data" source="levels/level56.txt"/>
+        <file name="LEVEL57.TXT" type="data" source="levels/level57.txt"/>
+        <file name="LEVEL58.TXT" type="data" source="levels/level58.txt"/>
+        <file name="LEVEL59.TXT" type="data" source="levels/level59.txt"/>
+        <file name="LEVEL60.TXT" type="data" source="levels/level60.txt"/>
+        <file name="LEVEL61.TXT" type="data" source="levels/level61.txt"/>
+        <file name="LEVEL62.TXT" type="data" source="levels/level62.txt"/>
+        <file name="LEVEL63.TXT" type="data" source="levels/level63.txt"/>
+        <file name="LEVEL64.TXT" type="data" source="levels/level64.txt"/>
+        <file name="LEVEL65.TXT" type="data" source="levels/level65.txt"/>
+        <file name="LEVEL66.TXT" type="data" source="levels/level66.txt"/>
+        <file name="LEVEL67.TXT" type="data" source="levels/level67.txt"/>
+        <file name="LEVEL68.TXT" type="data" source="levels/level68.txt"/>
+        <file name="LEVEL69.TXT" type="data" source="levels/level69.txt"/>
+        <file name="LEVEL70.TXT" type="data" source="levels/level70.txt"/>
+        <file name="LEVEL71.TXT" type="data" source="levels/level71.txt"/>
+        <file name="LEVEL72.TXT" type="data" source="levels/level72.txt"/>
+        <file name="LEVEL73.TXT" type="data" source="levels/level73.txt"/>
+        <file name="LEVEL74.TXT" type="data" source="levels/level74.txt"/>
+        <file name="LEVEL75.TXT" type="data" source="levels/level75.txt"/>
+        <file name="LEVEL76.TXT" type="data" source="levels/level76.txt"/>
+        <file name="LEVEL77.TXT" type="data" source="levels/level77.txt"/>
+        <file name="LEVEL78.TXT" type="data" source="levels/level78.txt"/>
+        <file name="LEVEL79.TXT" type="data" source="levels/level79.txt"/>
+        <file name="LEVEL80.TXT" type="data" source="levels/level80.txt"/>
+        <file name="LEVEL81.TXT" type="data" source="levels/level81.txt"/>
+        <file name="LEVEL82.TXT" type="data" source="levels/level82.txt"/>
+        <file name="LEVEL83.TXT" type="data" source="levels/level83.txt"/>
+        <file name="LEVEL84.TXT" type="data" source="levels/level84.txt"/>
+        <file name="LEVEL85.TXT" type="data" source="levels/level85.txt"/>
+        <file name="LEVEL86.TXT" type="data" source="levels/level86.txt"/>
+        <file name="LEVEL87.TXT" type="data" source="levels/level87.txt"/>
+        <file name="LEVEL88.TXT" type="data" source="levels/level88.txt"/>
+        <file name="LEVEL89.TXT" type="data" source="levels/level89.txt"/>
+        <file name="LEVEL90.TXT" type="data" source="levels/level90.txt"/>
+        <file name="LEVEL91.TXT" type="data" source="levels/level91.txt"/>
+        <file name="LEVEL92.TXT" type="data" source="levels/level92.txt"/>
+        <file name="LEVEL93.TXT" type="data" source="levels/level93.txt"/>
+        <file name="LEVEL94.TXT" type="data" source="levels/level94.txt"/>
+        <file name="LEVEL95.TXT" type="data" source="levels/level95.txt"/>
+        <file name="LEVEL96.TXT" type="data" source="levels/level96.txt"/>
+        <file name="LEVEL97.TXT" type="data" source="levels/level97.txt"/>
+        <file name="LEVEL98.TXT" type="data" source="levels/level98.txt"/>
+        <file name="LEVEL99.TXT" type="data" source="levels/level99.txt"/>
+      </dir>
+
+      <!-- Lastly, some dummy sectors must always be placed at the -->
+      <!-- end of the disc image. It must be a pretty large one to -->
+      <!-- make sure the console does not go run-away when it -->
+      <!-- reaches the end of the track -->
+      <dummy sectors="1024"/>
+
+    </directory_tree>
+
+  </track>
+
+</iso_project>
