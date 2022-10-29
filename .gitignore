@@ -6,3 +6,6 @@
 *.ELF
 *.EXE
 *.OBJ
+
+*.mrb
+sokoban_rb.*

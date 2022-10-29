@@ -49,11 +49,15 @@ CFLAGS += -DMRB_NO_FLOAT -DMRB_NO_STDIO
 LDFLAGS := -g -T linker.ld
 MRUBY_LDFLAGS = -L$(PSYQ)/lib -L/home/vbihl/mruby/build/playstation/lib
 
-SRC := level.c lvllut.c main.c input.c io.c renderer.c
+SRC := level.c lvllut.c main.c input.c io.c renderer.c sokoban_rb.c
 
 OBJ := $(SRC:.c=.o)
 
 all: $(ISO)
+
+sokoban_rb.c: sokoban.rb
+	mrbc sokoban.rb
+	ruby bin2c.rb sokoban.mrb
 
 $(ISO): $(EXE)
 	mkpsxiso -y mkpsxiso.xml

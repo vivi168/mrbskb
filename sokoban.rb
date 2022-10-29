@@ -15,4 +15,8 @@ b = {
   c: 13
 }
 
+puts "hello from ruby"
+puts a
+
 Foo.new(a.size).bar(b[:a])
+
