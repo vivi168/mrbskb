@@ -132,6 +132,9 @@ int main(int argc, char** argv)
     printf("EXECUTING MRUBY ON PSX : %d\n", mrb_fixnum(v));
     mrb_load_string(mrb, "a = { issou: 123, rire: '456' }; b = [1,2,3,4]; puts b; puts 'hello world'; puts a.inspect");
 
+    v = mrb_funcall(mrb, mrb_top_self(mrb), "from_ruby", 0);
+    printf("from ruby: %d\n", mrb_fixnum(v));
+
     print_mrb_exception(mrb);
     //----
 

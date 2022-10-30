@@ -18,5 +18,9 @@ b = {
 puts "hello from ruby"
 puts a
 
+def from_ruby
+  1337
+end
+
 Foo.new(a.size).bar(b[:a])
 
