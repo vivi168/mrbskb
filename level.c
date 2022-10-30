@@ -46,7 +46,7 @@ void lvl_init(Level* level, int index)
     lvl_reset(level);
 }
 
-void lvl_reset(Level* level)
+void lvl_reset(Level* level) // TODO -> ruby
 {
     char c;
     int *pcrate_pos = &level->crates_pos[0];
@@ -112,7 +112,7 @@ void lvl_reset(Level* level)
     level->voff = (LVL_H - h) / 2;
 }
 
-void fill_ground(Level* level)
+void fill_ground(Level* level) // TODO -> ruby
 {
     int i;
 
@@ -121,7 +121,7 @@ void fill_ground(Level* level)
     }
 }
 
-void empty_crate_pos(Level* level)
+void empty_crate_pos(Level* level) // TODO -> ruby
 {
     int i;
 

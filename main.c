@@ -11,6 +11,7 @@
 
 #include <mruby.h>
 #include <mruby/string.h>
+#include <mruby/internal.h>
 #include <mruby/irep.h>
 #include <mruby/compile.h>
 
@@ -68,22 +69,26 @@ static mrb_value mrb_f_foobar(mrb_state *mrb, mrb_value self)
     return mrb_fixnum_value(i);
 }
 
+void puts_mrb_str(const char* s, int len)
+{
+    for (int i = 0; i < (int)len; i++) {
+        putchar(s[i]);
+    }
+    putchar('\n');
+}
+
 static mrb_value mrb_f_puts(mrb_state *mrb, mrb_value self)
 {
     mrb_value s = mrb_get_arg1(mrb);
 
     if (!mrb_string_p(s)) {
-        /* return mrb_nil_value(); */
         s = mrb_inspect(mrb, mrb_get_arg1(mrb));
     }
 
     const char *p = RSTRING_PTR(s);
     mrb_int len = RSTRING_LEN(s);
 
-    for (int i = 0; i < (int)len; i++) {
-        putchar(p[i]);
-    }
-    putchar('\n');
+    puts_mrb_str(p, (int)len);
 
     return mrb_nil_value();
 }
@@ -92,6 +97,14 @@ void mrb_helper_init(mrb_state *mrb)
 {
     mrb_define_method(mrb, mrb->kernel_module, "foobar", mrb_f_foobar, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, mrb->kernel_module, "puts", mrb_f_puts, MRB_ARGS_REQ(1));
+}
+
+void print_mrb_exception(mrb_state *mrb)
+{
+    if (!mrb->exc) return;
+
+    mrb_value mesg = mrb_exc_inspect(mrb, mrb_obj_value(mrb->exc));
+    puts_mrb_str(RSTRING_PTR(mesg), (int)RSTRING_LEN(mesg));
 }
 
 int main(int argc, char** argv)
@@ -118,6 +131,8 @@ int main(int argc, char** argv)
     v = mrb_load_irep(mrb, sokoban_rb);
     printf("EXECUTING MRUBY ON PSX : %d\n", mrb_fixnum(v));
     mrb_load_string(mrb, "a = { issou: 123, rire: '456' }; b = [1,2,3,4]; puts b; puts 'hello world'; puts a.inspect");
+
+    print_mrb_exception(mrb);
     //----
 
     mainloop();
