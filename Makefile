@@ -6,6 +6,10 @@ ifeq ($(PSYQ),)
 $(error PSYQ SDK path is not set)
 endif
 
+ifeq ($(MRUBY),)
+$(error MRUBY path is not set)
+endif
+
 ELF := MAIN.ELF
 EXE := MAIN.EXE
 ISO := sokoban.bin
@@ -14,16 +18,11 @@ CC := $(TOOLCHAIN)gcc
 LD := $(TOOLCHAIN)gcc
 OBJCOPY := $(TOOLCHAIN)objcopy
 
-MRUBY_CFLAGS = -std=gnu99 -g -O3 -Wall -Wundef -Werror-implicit-function-declaration -Wwrite-strings -I"/home/vbihl/mruby/include" -I"/home/vbihl/mruby/build/host/include"
-
-MRUBY_LDFLAGS_BEFORE_LIBS =
-MRUBY_LIBS = -lmruby -lm
-
-INC := -I$(PSYQ)/include -I/home/vbihl/mruby/include -I/home/vbihl/mruby/build/playstation/include
+INC := -I$(PSYQ)/include -I$(MRUBY)/include -I$(MRUBY)/build/playstation/include
 
 LIB := \
-	/home/vbihl/mruby/build/playstation/lib/libmruby.a \
-	/home/vbihl/mruby/build/playstation/lib/libmruby_core.a \
+	$(MRUBY)/build/playstation/lib/libmruby.a \
+	$(MRUBY)/build/playstation/lib/libmruby_core.a \
 	$(PSYQ)/lib/libcard.a \
 	$(PSYQ)/lib/libpress.a \
 	$(PSYQ)/lib/libgpu.a \
@@ -47,7 +46,7 @@ LIB := \
 CFLAGS := -g -G0 -ffreestanding -nostdlib -Wall -Wundef -Werror-implicit-function-declaration -Wwrite-strings $(INC)
 CFLAGS += -DMRB_NO_FLOAT -DMRB_NO_STDIO
 LDFLAGS := -g -T linker.ld
-MRUBY_LDFLAGS = -L$(PSYQ)/lib -L/home/vbihl/mruby/build/playstation/lib
+MRUBY_LDFLAGS = -L$(PSYQ)/lib -L$(MRUBY)/build/playstation/lib
 
 SRC := level.c lvllut.c main.c input.c io.c renderer.c sokoban_rb.c
 
