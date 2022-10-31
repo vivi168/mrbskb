@@ -87,4 +87,10 @@ void mrb_pad_module_init(mrb_state* mrb)
     /* mrb_define_module_function(mrb, psx_pad, "held?", mrb_f_is_held, MRB_ARGS_REQ(1)); */
     /* mrb_define_module_function(mrb, psx_pad, "pressed?", mrb_f_is_pressed, MRB_ARGS_REQ(1)); */
     /* mrb_define_module_function(mrb, psx_pad, "released?", mrb_f_is_released, MRB_ARGS_REQ(1)); */
+
+    mrb_define_const(mrb, psx_pad, "KEY_UP", mrb_int_value(mrb, KEY_UP));
+    mrb_define_const(mrb, psx_pad, "KEY_RIGHT", mrb_int_value(mrb, KEY_RIGHT));
+    mrb_define_const(mrb, psx_pad, "KEY_DOWN", mrb_int_value(mrb, KEY_DOWN));
+    mrb_define_const(mrb, psx_pad, "KEY_LEFT", mrb_int_value(mrb, KEY_LEFT));
+    mrb_define_const(mrb, psx_pad, "KEY_TRIANGLE", mrb_int_value(mrb, KEY_TRIANGLE));
 }

@@ -36,7 +36,7 @@ void process_input()
         if (lvl_move_player(&level, DIR_RIGHT)) level.steps++;
     }
 
-    if (iptm_is_pressed(KEY_RESTART)) {
+    if (iptm_is_pressed(KEY_TRIANGLE)) {
         lvl_reset(&level);
     }
 }

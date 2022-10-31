@@ -7,7 +7,7 @@
 #define KEY_RIGHT   5
 #define KEY_DOWN    6
 #define KEY_LEFT    7
-#define KEY_RESTART 12   // triangle 1 << 12
+#define KEY_TRIANGLE 12
 
 typedef struct input_manager_t {
     unsigned int new_keystate, old_keystate;
