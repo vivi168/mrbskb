@@ -1,28 +1,28 @@
-GROUND_CHAR  = ' '
-TARGET_CHAR  = '.'
-TARGET_PCHAR = '+'
-TARGET_CCHAR = '*'
-WALL_CHAR    = '#'
-CRATE_CHAR   = '$'
-PLAYER_CHAR  = '@'
-NEWLINE_CHAR = "\n"
-
-GROUND_T = 0
-TARGET_T = 1
-WALL_T = 2
-VOID_T = 3
-
-DIR_UP = 0
-DIR_LEFT = 1
-DIR_DOWN = 2
-DIR_RIGHT = 3
-
-LVL_W = 20
-LVL_H = 15
-LVL_SIZE = (LVL_W * LVL_H)
-MAX_CRATES = 31
-
 class Level
+  GROUND_CHAR  = ' '
+  TARGET_CHAR  = '.'
+  TARGET_PCHAR = '+'
+  TARGET_CCHAR = '*'
+  WALL_CHAR    = '#'
+  CRATE_CHAR   = '$'
+  PLAYER_CHAR  = '@'
+  NEWLINE_CHAR = "\n"
+
+  GROUND_T = 0
+  TARGET_T = 1
+  WALL_T = 2
+  VOID_T = 3
+
+  DIR_UP = 0
+  DIR_LEFT = 1
+  DIR_DOWN = 2
+  DIR_RIGHT = 3
+
+  LVL_W = 20
+  LVL_H = 15
+  LVL_SIZE = (LVL_W * LVL_H)
+  MAX_CRATES = 31
+
   def initialize(filename)
     @str = PSX::IO.load_file(filename)
     @loaded = !@str.nil?
@@ -85,7 +85,7 @@ class Level
 
   def move_player(direction)
     prev_pos = @player_pos
-    moved = false
+    # moved = false
 
     case direction
     when DIR_UP
@@ -98,11 +98,52 @@ class Level
       @player_pos += 1
     end
 
-    @crates_pos.each do |crate|
-    end
+    # TODO: replace with detect
+    # @crates_pos.each do |crate_pos|
+    #   if @player_pos == crate_pos
+    #     moved = move_crate(crate_pos, direction)
+
+    #     @player_pos = prev_pos
+    #     break
+    #   end
+    # end
+    crate_pos = @crates_pos.detect { |c| c == @player_pos }
+    @player_pos = prev_pos unless move_crate(crate_pos, direction)
+    @player_pos = prev_pos if @tiles[@player_pos ] == WALL_T
+    @player_pos = prev_pos if @player_pos < 0 || @player_pos > LVL_SIZE
+    puts "moving player... #{@player_pos}"
+
+    @player_pos != prev_pos
   end
 
-  def move_crate(index, direction)
+  # return true if crates has moved or if crate_pos is nil
+  def move_crate(crate_pos, direction)
+    return true if crate_pos.nil? # allow player movement if pos is nil
+
+    prev_pos = crate_pos
+
+    case direction
+    when DIR_UP
+      crate_pos -= LVL_W
+    when DIR_DOWN
+      crate_pos += LVL_W
+    when DIR_LEFT
+      crate_pos -= 1
+    when DIR_RIGHT
+      crate_pos += 1
+    end
+
+    # TODO: can use index instead of detect
+    crate_pos = prev_pos if @crates_pos.detect { |c| c == crate_pos }
+    crate_pos = prev_pos if @tiles[crate_pos] == WALL_T
+    crate_pos = prev_pos if crate_pos < 0 || crate_pos > LVL_SIZE
+
+    i = @crates_pos.index(prev_pos)
+    @crates_pos[i] = crate_pos
+
+    puts "moving crates... #{@crates_pos.inspect}"
+
+    crate_pos != prev_pos
   end
 
   def done?
@@ -127,3 +168,12 @@ end
 
 l = Level.new('\LEVELS\LEVEL01.TXT;1')
 l.debug
+
+# puts "down..."
+# l.move_player(DIR_DOWN)
+# puts "up..."
+# l.move_player(DIR_UP)
+# puts "left..."
+# l.move_player(DIR_LEFT)
+# puts "right..."
+# l.move_player(DIR_RIGHT)
