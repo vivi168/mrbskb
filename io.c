@@ -43,14 +43,9 @@ static mrb_value mrb_f_load_file(mrb_state* mrb, mrb_value self)
 
     filename = mrb_str_to_cstr(mrb, s);
 
-    printf("LOADING FILE THROUGH RUBY %s\n", filename);
+    printf("[INFO] file requested by ruby: %s\n", filename);
 
     buff = load_file(filename, &file_size);
-
-    for (long i = 0; i < file_size; i++) {
-        printf("%x ", buff[i]);
-    }
-    printf("\n");
 
     mrb_value str = mrb_str_new(mrb, buff, file_size);
 
