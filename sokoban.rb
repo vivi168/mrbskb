@@ -19,7 +19,7 @@ MAX_CRATES = 31
 
 class Level
   def initialize(filename)
-    str = PSXIO.load_file(filename)
+    str = PSX::IO.load_file(filename)
 
     puts str
 

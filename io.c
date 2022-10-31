@@ -53,11 +53,11 @@ static mrb_value mrb_f_load_file(mrb_state* mrb, mrb_value self)
     return str;
 }
 
-void mrb_io_module_init(mrb_state *mrb)
+void mrb_io_module_init(mrb_state *mrb, struct RClass* outer)
 {
     struct RClass *psx_io;
 
-    psx_io = mrb_define_module(mrb, "PSXIO");
+    psx_io = mrb_define_module_under(mrb, outer, "IO");
     mrb_define_module_function(mrb, psx_io, "load_file", mrb_f_load_file, MRB_ARGS_REQ(1));
 }
 

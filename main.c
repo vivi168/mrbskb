@@ -92,10 +92,15 @@ static mrb_value mrb_f_puts(mrb_state *mrb, mrb_value self)
 
 void mrb_helper_init(mrb_state *mrb)
 {
+    struct RClass *psx;
+
     mrb_define_method(mrb, mrb->kernel_module, "foobar", mrb_f_foobar, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, mrb->kernel_module, "puts", mrb_f_puts, MRB_ARGS_REQ(1));
 
-    mrb_io_module_init(mrb);
+
+    psx = mrb_define_module(mrb, "PSX");
+
+    mrb_io_module_init(mrb, psx);
 }
 
 void print_mrb_exception(mrb_state *mrb)

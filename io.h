@@ -3,4 +3,4 @@
 #include <mruby.h>
 
 char* load_file(const char*, u_long*);
-void mrb_io_module_init(mrb_state* mrb);
+void mrb_io_module_init(mrb_state* mrb, struct RClass* outer);
