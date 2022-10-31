@@ -74,4 +74,5 @@ MRuby::CrossBuild.new("playstation") do |conf|
   conf.disable_cxx_exception
 
   conf.gem core: "mruby-compiler"
+  conf.gem core: "mruby-string-ext"
 end

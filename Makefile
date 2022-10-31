@@ -55,7 +55,7 @@ OBJ := $(SRC:.c=.o)
 all: $(ISO)
 
 sokoban.mrb: sokoban.rb
-	mrbc sokoban.rb
+	$(MRUBY)/build/host/bin/mrbc sokoban.rb
 	ruby bin2c.rb sokoban.mrb
 
 $(ISO): sokoban.mrb $(EXE)

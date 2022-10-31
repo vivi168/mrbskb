@@ -23,8 +23,8 @@ class Level
   LVL_SIZE = (LVL_W * LVL_H)
   MAX_CRATES = 31
 
-  def initialize(filename)
-    @str = PSX::IO.load_file(filename)
+  def initialize(index)
+    @str = PSX::IO.load_file(filename(index))
     @loaded = !@str.nil?
 
     return unless @loaded
@@ -149,6 +149,12 @@ class Level
   def done?
   end
 
+  def filename(index)
+    idx = (index + 1).to_s.rjust(2, '0')
+
+    "\\LEVELS\\LEVEL#{idx}.TXT;1"
+  end
+
   def debug
     if !@loaded
       puts 'level is empty !'
@@ -162,12 +168,23 @@ class Level
   end
 end
 
+class Sokoban
+  def initialize
+    @current_level = 14
+
+    l = Level.new(@current_level)
+    l.debug
+  end
+
+  def mainloop
+  end
+end
+
 def from_ruby
   1337
 end
 
-l = Level.new('\LEVELS\LEVEL01.TXT;1')
-l.debug
+Sokoban.new
 
 # puts "down..."
 # l.move_player(DIR_DOWN)
