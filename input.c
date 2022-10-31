@@ -74,12 +74,12 @@ int iptm_is_released(int k) {
     return (1 << k) & input_manager.keys_released;
 }
 
-void mrb_pad_module_init(mrb_state* mrb)
+void mrb_pad_module_init(mrb_state* mrb, struct RClass *outer)
 {
 
     struct RClass *psx_pad;
 
-    psx_pad = mrb_define_module(mrb, "PSXPad");
+    psx_pad = mrb_define_module_under(mrb, outer, "Pad");
 
     // iptm_init()
 

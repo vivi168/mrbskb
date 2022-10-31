@@ -144,7 +144,5 @@ int main(int argc, char** argv)
 
     mainloop();
 
-    rdr_cleanup();
-
     return 0;
 }

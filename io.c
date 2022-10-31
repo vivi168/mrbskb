@@ -17,7 +17,7 @@ char* load_file(const char* filename, u_long *size)
 
     if(CdSearchFile(&file, filename) == NULL) {
         printf("[ERROR]: File not found %s\n", filename);
-        return buff;
+        return NULL;
     }
 
     printf("[INFO]: found %s\n", filename);
@@ -46,6 +46,8 @@ static mrb_value mrb_f_load_file(mrb_state* mrb, mrb_value self)
     printf("[INFO] file requested by ruby: %s\n", filename);
 
     buff = load_file(filename, &file_size);
+
+    if (!buff) return mrb_nil_value();
 
     mrb_value str = mrb_str_new(mrb, buff, file_size);
 

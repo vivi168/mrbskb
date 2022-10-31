@@ -199,14 +199,10 @@ void rdr_render_sprite(RECT *src, int x, int y)
     nextpri += sizeof(SPRT);
 }
 
-void rdr_cleanup()
-{
-    // TODO
-}
-
 unsigned int rdr_getticks()
 {
     // TODO
+    // VSync(-1)
     return 0;
 }
 

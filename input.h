@@ -20,6 +20,6 @@ int iptm_is_held(int);
 int iptm_is_pressed(int);
 int iptm_is_released(int);
 
-void mrb_pad_module_init(mrb_state* mrb);
+void mrb_pad_module_init(mrb_state* mrb, struct RClass* outer);
 
 #endif

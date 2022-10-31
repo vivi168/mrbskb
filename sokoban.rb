@@ -19,21 +19,21 @@ MAX_CRATES = 31
 
 class Level
   def initialize(filename)
-    str = PSX::IO.load_file(filename)
+    @str = PSX::IO.load_file(filename)
+    @loaded = !@str.nil?
 
-    puts str
+    return unless @loaded
 
-    @def = str.split('')
+    puts @str
 
+    @def = @str.split('')
     @tiles = [VOID_T] * LVL_SIZE
     @level_size = @def.size
     @crates_pos = []
     @crate_count = 0
     @player_pos = 0
     @offsets = { h: 0, v: 0 }
-  end
 
-  def init
     draw_ground = false
     w = 0
     h = 0
@@ -71,7 +71,6 @@ class Level
         next
       end
 
-
       l += 1
       k += 1
     end
@@ -86,6 +85,10 @@ class Level
   end
 
   def debug
+    if !@loaded
+      puts 'level is empty !'
+      return
+    end
     puts "level size: #{@level_size}"
     puts @tiles.inspect
     puts "player pos #{@player_pos}, crate count #{@crate_count}"
@@ -118,8 +121,7 @@ def from_ruby
   1337
 end
 
-l = Level.new('\LEVELS\LEVEL15.TXT;1')
-l.init
+l = Level.new('\LEVELS\LEVEL01.TXT;1')
 l.debug
 
 Foo.new(a.size).bar(b[:a])
