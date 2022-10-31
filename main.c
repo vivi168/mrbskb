@@ -4,16 +4,17 @@
 
 #include "header.h"
 
-#include "renderer.h"
-#include "level.h"
-#include "input.h"
-#include "sokoban_rb.h"
-
 #include <mruby.h>
 #include <mruby/string.h>
 #include <mruby/internal.h>
 #include <mruby/irep.h>
 #include <mruby/compile.h>
+
+#include "renderer.h"
+#include "io.h"
+#include "level.h"
+#include "input.h"
+#include "sokoban_rb.h"
 
 #define HEAP_SIZE (1024 * 1024)
 char heap[HEAP_SIZE];
@@ -97,6 +98,8 @@ void mrb_helper_init(mrb_state *mrb)
 {
     mrb_define_method(mrb, mrb->kernel_module, "foobar", mrb_f_foobar, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, mrb->kernel_module, "puts", mrb_f_puts, MRB_ARGS_REQ(1));
+
+    mrb_io_module_init(mrb);
 }
 
 void print_mrb_exception(mrb_state *mrb)

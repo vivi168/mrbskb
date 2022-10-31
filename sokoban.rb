@@ -1,3 +1,6 @@
+class Level
+end
+
 class Foo
   def initialize(foo)
     @bar = foo
@@ -21,6 +24,10 @@ puts a
 def from_ruby
   1337
 end
+
+s = PSXIO.load_file('\LEVELS\LEVEL01.TXT;1')
+
+puts s
 
 Foo.new(a.size).bar(b[:a])
 
