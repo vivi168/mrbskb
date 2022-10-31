@@ -54,11 +54,11 @@ OBJ := $(SRC:.c=.o)
 
 all: $(ISO)
 
-sokoban_rb.c: sokoban.rb
+sokoban.mrb: sokoban.rb
 	mrbc sokoban.rb
 	ruby bin2c.rb sokoban.mrb
 
-$(ISO): $(EXE)
+$(ISO): sokoban.mrb $(EXE)
 	mkpsxiso -y mkpsxiso.xml
 
 $(EXE): $(ELF)
@@ -71,7 +71,7 @@ $(ELF): $(OBJ)
 	$(CC) -c $(CFLAGS) $<
 
 clean:
-	rm -f $(ELF) $(EXE) $(OBJ) $(ISO)
+	rm -f $(ELF) $(EXE) $(OBJ) $(ISO) sokoban.mrb sokoban_rb.h sokoban_rb.c
 
 install:
 	cp sokoban.bin /mnt/c/Users/vbihl/Desktop/PSX_EXAMPLES
