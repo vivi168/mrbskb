@@ -1,4 +1,4 @@
-GROUND_CHAR  =  ' '
+GROUND_CHAR  = ' '
 TARGET_CHAR  = '.'
 TARGET_PCHAR = '+'
 TARGET_CCHAR = '*'
@@ -11,6 +11,11 @@ GROUND_T = 0
 TARGET_T = 1
 WALL_T = 2
 VOID_T = 3
+
+DIR_UP = 0
+DIR_LEFT = 1
+DIR_DOWN = 2
+DIR_RIGHT = 3
 
 LVL_W = 20
 LVL_H = 15
@@ -26,11 +31,9 @@ class Level
 
     puts @str
 
-    @def = @str.split('')
+    definition = @str.split('')
     @tiles = [VOID_T] * LVL_SIZE
-    @level_size = @def.size
     @crates_pos = []
-    @crate_count = 0
     @player_pos = 0
     @offsets = { h: 0, v: 0 }
 
@@ -40,7 +43,7 @@ class Level
     k = 0
     l = 0
 
-    @def.each do |c|
+    definition.each do |c|
       case c
       when GROUND_CHAR
         @tiles[k] = GROUND_T if (draw_ground)
@@ -75,13 +78,34 @@ class Level
       k += 1
     end
 
-    @crate_count = @crates_pos.size
-    pad = MAX_CRATES - @crate_count
-    @crates_pos += [-1] * pad
-
     @offsets = { h: (LVL_W  - w) / 2, v: (LVL_H - h) / 2 }
 
     true
+  end
+
+  def move_player(direction)
+    prev_pos = @player_pos
+    moved = false
+
+    case direction
+    when DIR_UP
+      @player_pos -= LVL_W
+    when DIR_DOWN
+      @player_pos += LVL_W
+    when DIR_LEFT
+      @player_pos -= 1
+    when DIR_RIGHT
+      @player_pos += 1
+    end
+
+    @crates_pos.each do |crate|
+    end
+  end
+
+  def move_crate(index, direction)
+  end
+
+  def done?
   end
 
   def debug
@@ -89,33 +113,13 @@ class Level
       puts 'level is empty !'
       return
     end
-    puts "level size: #{@level_size}"
+    puts "level size: #{@tiles.size}"
     puts @tiles.inspect
-    puts "player pos #{@player_pos}, crate count #{@crate_count}"
+    puts "player pos #{@player_pos}, crate count #{@crates_pos.size}"
+    puts @crates_pos.inspect
     puts @offsets.inspect
-
   end
 end
-
-class Foo
-  def initialize(foo)
-    @bar = foo
-  end
-
-  def bar(baz)
-    foobar(baz) * @bar
-  end
-end
-
-a = [1, 2, 3, 4, 5]
-
-b = {
-  a: 12,
-  c: 13
-}
-
-puts "hello from ruby"
-puts a
 
 def from_ruby
   1337
@@ -123,6 +127,3 @@ end
 
 l = Level.new('\LEVELS\LEVEL01.TXT;1')
 l.debug
-
-Foo.new(a.size).bar(b[:a])
-
