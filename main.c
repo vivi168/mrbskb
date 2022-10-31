@@ -23,10 +23,6 @@ Level level;
 
 void process_input()
 {
-    if (iptm_quit_requested() || iptm_is_pressed(KEY_QUIT)) {
-        printf("[INFO]: quit requested\n");
-    }
-
     if (iptm_is_pressed(KEY_UP)) {
         if (lvl_move_player(&level, DIR_UP)) level.steps++;
     }

@@ -64,7 +64,6 @@ void lvl_reset(Level* level) // TODO -> ruby
 
     for (i = 0; i < level->size; i++) {
         c = level->def[i];
-        printf("%x ", c);
         switch(c) {
         case GROUND_CHAR:
             if (draw_ground) level->tiles[k] = GROUND_T;
