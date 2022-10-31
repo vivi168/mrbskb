@@ -147,6 +147,7 @@ class Level
   end
 
   def done?
+    @crates_pos.map { |c| @tiles[c] == TARGET_T }.all?(true)
   end
 
   def filename(index)
@@ -170,13 +171,15 @@ end
 
 class Sokoban
   def initialize
-    @current_level = 14
+    @current_level = 0
 
     l = Level.new(@current_level)
     l.debug
+    puts l.done?
   end
 
   def mainloop
+    loop { }
   end
 end
 

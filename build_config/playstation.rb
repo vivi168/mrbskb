@@ -75,4 +75,5 @@ MRuby::CrossBuild.new("playstation") do |conf|
 
   conf.gem core: "mruby-compiler"
   conf.gem core: "mruby-string-ext"
+  conf.gem core: "mruby-enum-ext"
 end
