@@ -25,8 +25,10 @@ class Level
 
     @def = str.split('')
 
-    @tiles = []
+    @tiles = [VOID_T] * LVL_SIZE
+    @level_size = @def.size
     @crates_pos = []
+    @crate_count = 0
     @player_pos = 0
     @offsets = { h: 0, v: 0 }
   end
@@ -37,8 +39,6 @@ class Level
     h = 0
     k = 0
     l = 0
-
-    @tiles = [VOID_T] * LVL_SIZE
 
     @def.each do |c|
       case c
@@ -76,14 +76,21 @@ class Level
       k += 1
     end
 
+    @crate_count = @crates_pos.size
+    pad = MAX_CRATES - @crate_count
+    @crates_pos += [-1] * pad
+
     @offsets = { h: (LVL_W  - w) / 2, v: (LVL_H - h) / 2 }
+
+    true
   end
 
   def debug
+    puts "level size: #{@level_size}"
     puts @tiles.inspect
-    puts @player_pos
-    puts @crates_pos.inspect
+    puts "player pos #{@player_pos}, crate count #{@crate_count}"
     puts @offsets.inspect
+
   end
 end
 
