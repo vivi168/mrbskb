@@ -1,13 +1,11 @@
 TOOLCHAIN := mipsel-none-elf-
 
-PSYQ := /home/vbihl/PSYQSDK
-
-ifeq ($(PSYQ),)
-$(error PSYQ SDK path is not set)
+ifeq ($(PSYQ_PATH),)
+$(error PSYQ_PATH is not set)
 endif
 
-ifeq ($(MRUBY),)
-$(error MRUBY path is not set)
+ifeq ($(MRUBY_PATH),)
+$(error MRUBY_PATH is not set)
 endif
 
 ELF := MAIN.ELF
@@ -18,35 +16,35 @@ CC := $(TOOLCHAIN)gcc
 LD := $(TOOLCHAIN)gcc
 OBJCOPY := $(TOOLCHAIN)objcopy
 
-INC := -I$(PSYQ)/include -I$(MRUBY)/include -I$(MRUBY)/build/playstation/include
+INC := -I$(PSYQ_PATH)/include -I$(MRUBY_PATH)/include -I$(MRUBY_PATH)/build/playstation/include
 
 LIB := \
-	$(MRUBY)/build/playstation/lib/libmruby.a \
-	$(MRUBY)/build/playstation/lib/libmruby_core.a \
-	$(PSYQ)/lib/libcard.a \
-	$(PSYQ)/lib/libpress.a \
-	$(PSYQ)/lib/libgpu.a \
-	$(PSYQ)/lib/libgs.a \
-	$(PSYQ)/lib/libgte.a \
-	$(PSYQ)/lib/libcd.a \
-	$(PSYQ)/lib/libetc.a \
-	$(PSYQ)/lib/libsn.a \
-	$(PSYQ)/lib/libsnd.a \
-	$(PSYQ)/lib/libspu.a \
-	$(PSYQ)/lib/libmath.a \
-	$(PSYQ)/lib/libcomb.a \
-	$(PSYQ)/lib/libcard.a \
-	$(PSYQ)/lib/libtap.a \
-	$(PSYQ)/lib/libsio.a \
-	$(PSYQ)/lib/libpad.a \
-	$(PSYQ)/lib/libc2.a \
-	$(PSYQ)/lib/libapi.a \
-	$(PSYQ)/lib/extra.a
+	$(MRUBY_PATH)/build/playstation/lib/libmruby.a \
+	$(MRUBY_PATH)/build/playstation/lib/libmruby_core.a \
+	$(PSYQ_PATH)/lib/libcard.a \
+	$(PSYQ_PATH)/lib/libpress.a \
+	$(PSYQ_PATH)/lib/libgpu.a \
+	$(PSYQ_PATH)/lib/libgs.a \
+	$(PSYQ_PATH)/lib/libgte.a \
+	$(PSYQ_PATH)/lib/libcd.a \
+	$(PSYQ_PATH)/lib/libetc.a \
+	$(PSYQ_PATH)/lib/libsn.a \
+	$(PSYQ_PATH)/lib/libsnd.a \
+	$(PSYQ_PATH)/lib/libspu.a \
+	$(PSYQ_PATH)/lib/libmath.a \
+	$(PSYQ_PATH)/lib/libcomb.a \
+	$(PSYQ_PATH)/lib/libcard.a \
+	$(PSYQ_PATH)/lib/libtap.a \
+	$(PSYQ_PATH)/lib/libsio.a \
+	$(PSYQ_PATH)/lib/libpad.a \
+	$(PSYQ_PATH)/lib/libc2.a \
+	$(PSYQ_PATH)/lib/libapi.a \
+	$(PSYQ_PATH)/lib/extra.a
 
 CFLAGS := -g -O2 -G0 -ffreestanding -nostdlib -mno-unaligned-access -Wall -Wundef -Werror-implicit-function-declaration -Wwrite-strings $(INC)
 CFLAGS += -DMRB_NO_FLOAT -DMRB_NO_STDIO
-LDFLAGS := -g -O2 -T linker.ld
-MRUBY_LDFLAGS = -L$(PSYQ)/lib -L$(MRUBY)/build/playstation/lib
+LDFLAGS := -g -T linker.ld
+MRUBY_LDFLAGS = -L$(PSYQ_PATH)/lib -L$(MRUBY_PATH)/build/playstation/lib
 
 SRC := main.c input.c io.c renderer.c sokoban_rb.c
 
@@ -55,7 +53,7 @@ OBJ := $(SRC:.c=.o)
 all: $(ISO)
 
 sokoban.mrb: sokoban.rb
-	$(MRUBY)/build/host/bin/mrbc sokoban.rb
+	$(MRUBY_PATH)/build/host/bin/mrbc sokoban.rb
 	ruby bin2c.rb sokoban.mrb
 
 $(ISO): sokoban.mrb $(EXE)

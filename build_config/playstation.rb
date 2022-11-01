@@ -5,7 +5,7 @@
 MRuby::CrossBuild.new("playstation") do |conf|
   toolchain :gcc
 
-  PSYQ_PATH = "/home/vbihl/PSYQSDK"
+  PSYQ_PATH = ENV['PSYQ_PATH']
 
   # C compiler
   conf.cc do |cc|
