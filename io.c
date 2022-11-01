@@ -61,5 +61,7 @@ void mrb_io_module_init(mrb_state *mrb, struct RClass* outer)
 
     psx_io = mrb_define_module_under(mrb, outer, "IO");
     mrb_define_module_function(mrb, psx_io, "load_file", mrb_f_load_file, MRB_ARGS_REQ(1));
+
+    printf("[INFO] PSX::IO initialized\n");
 }
 

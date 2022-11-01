@@ -9,6 +9,8 @@
 #include "io.h"
 #include "renderer.h"
 
+#include <mruby/string.h>
+
 #define SCREEN_W 320
 #define SCREEN_H 240
 
@@ -19,6 +21,7 @@ typedef struct db_t {
     DISPENV disp;
     DRAWENV draw;
     u_long ot[OTLEN];
+    int fnt_id;
     char pribuff[32768];
 } DB;
 
@@ -62,8 +65,9 @@ void rdr_init()
 
     rdr_create_texture();
 
-    FntLoad( 960, 0 );
-    FntOpen( 0, 8, 320, 224, 0, 100 );
+    FntLoad(960, 0);
+    db[0].fnt_id = FntOpen(0, 8, 320, 224, 0, 100);
+    db[1].fnt_id = FntOpen(0, 8, 320, 224, 0, 100);
 
     SetDispMask(1);
 }
@@ -119,8 +123,8 @@ void rdr_render(Level* level)
 
     rdr_render_level(level);
 
-    FntPrint("LEVEL %d - STEPS %d", level->index+1, level->steps);
-    FntFlush(-1);
+    FntPrint(cdb->fnt_id, "LEVEL %d - STEPS %d", level->index+1, level->steps);
+    FntFlush(cdb->fnt_id);
 }
 
 void rdr_render_level(Level* level)
@@ -218,4 +222,79 @@ void rdr_delay(int frame_start)
 
     cdb = (cdb == &db[0]) ? &db[1] : &db[0];
     nextpri = cdb->pribuff;
+}
+
+static mrb_value mrb_f_draw_tile(mrb_state* mrb, mrb_value self)
+{
+    mrb_int hoff, voff, tile_index, pos;
+
+    mrb_get_args(mrb, "iiii", &hoff, &voff, &tile_index, &pos);
+    rdr_render_tile(hoff * TILE_SIZE, voff * TILE_SIZE, tile_index, pos);
+
+    return mrb_nil_value();
+}
+
+static mrb_value mrb_f_draw_tpage(mrb_state* mrb, mrb_value self)
+{
+    DR_TPAGE *tpage;
+
+    tpage = (DR_TPAGE*)nextpri;
+    SetDrawTPage(tpage, 0, 1, texture.tpage);
+    addPrim(cdb->ot, tpage);
+    nextpri += sizeof(DR_TPAGE);
+
+    return mrb_nil_value();
+}
+
+static mrb_value mrb_f_clear_otag(mrb_state* mrb, mrb_value self)
+{
+    ClearOTagR(cdb->ot, OTLEN);
+
+    return mrb_nil_value();
+}
+
+static mrb_value mrb_f_print(mrb_state* mrb, mrb_value self)
+{
+    mrb_value s = mrb_get_arg1(mrb);
+
+    if (!mrb_string_p(s)) {
+        return mrb_nil_value();
+    }
+
+    char* str = mrb_str_to_cstr(mrb, s);
+    FntPrint(str);
+    FntFlush(-1);
+
+    return mrb_nil_value();
+}
+
+static mrb_value mrb_f_delay(mrb_state* mrb, mrb_value self)
+{
+    rdr_delay(0);
+
+    return mrb_nil_value();
+}
+
+void mrb_graph_module_init(mrb_state *mrb, struct RClass* outer)
+{
+    struct RClass *psx_graph;
+
+    // rdr_init();
+
+    psx_graph = mrb_define_module_under(mrb, outer, "Graph");
+
+    mrb_define_const(mrb, psx_graph, "GROUND_IDX", mrb_int_value(mrb, GROUND_IDX));
+    mrb_define_const(mrb, psx_graph, "TARGET_IDX", mrb_int_value(mrb, TARGET_IDX));
+    mrb_define_const(mrb, psx_graph, "WALL_IDX", mrb_int_value(mrb, WALL_IDX));
+    mrb_define_const(mrb, psx_graph, "PLAYER_IDX", mrb_int_value(mrb, PLAYER_IDX));
+    mrb_define_const(mrb, psx_graph, "CRATEG_IDX", mrb_int_value(mrb, CRATEG_IDX));
+    mrb_define_const(mrb, psx_graph, "CRATET_IDX", mrb_int_value(mrb, CRATET_IDX));
+
+    mrb_define_module_function(mrb, psx_graph, "draw_tile", mrb_f_draw_tile, MRB_ARGS_REQ(4));
+    mrb_define_module_function(mrb, psx_graph, "draw_tpage", mrb_f_draw_tpage, MRB_ARGS_NONE());
+    mrb_define_module_function(mrb, psx_graph, "clear_otag", mrb_f_clear_otag, MRB_ARGS_NONE());
+    mrb_define_module_function(mrb, psx_graph, "print", mrb_f_print, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, psx_graph, "delay", mrb_f_delay, MRB_ARGS_NONE());
+
+    printf("[INFO] PSX::Graph initialized\n");
 }

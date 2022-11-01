@@ -1,7 +1,9 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef __RENDERER_H
+#define __RENDERER_H
 
 #include "level.h"
+
+#include <mruby.h>
 
 // tiles indices in spritesheet
 #define GROUND_IDX 0
@@ -19,6 +21,8 @@ void rdr_render_tile(int, int, int, int);
 
 unsigned int rdr_getticks();
 void rdr_delay();
+
+void mrb_graph_module_init(mrb_state *mrb, struct RClass* outer);
 
 #undef gte_rtps
 #define gte_rtps() __asm__ volatile (\

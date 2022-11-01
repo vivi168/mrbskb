@@ -119,4 +119,6 @@ void mrb_pad_module_init(mrb_state* mrb, struct RClass *outer)
     mrb_define_const(mrb, psx_pad, "KEY_DOWN", mrb_int_value(mrb, KEY_DOWN));
     mrb_define_const(mrb, psx_pad, "KEY_LEFT", mrb_int_value(mrb, KEY_LEFT));
     mrb_define_const(mrb, psx_pad, "KEY_TRIANGLE", mrb_int_value(mrb, KEY_TRIANGLE));
+
+    printf("[INFO] PSX::Pad initialized\n");
 }

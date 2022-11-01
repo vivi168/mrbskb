@@ -1,3 +1,13 @@
+DIR_UP = 0
+DIR_LEFT = 1
+DIR_DOWN = 2
+DIR_RIGHT = 3
+
+GROUND_T = 0
+TARGET_T = 1
+WALL_T = 2
+VOID_T = 3
+
 class Level
   GROUND_CHAR  = ' '
   TARGET_CHAR  = '.'
@@ -8,23 +18,14 @@ class Level
   PLAYER_CHAR  = '@'
   NEWLINE_CHAR = "\n"
 
-  GROUND_T = 0
-  TARGET_T = 1
-  WALL_T = 2
-  VOID_T = 3
-
-  DIR_UP = 0
-  DIR_LEFT = 1
-  DIR_DOWN = 2
-  DIR_RIGHT = 3
-
   LVL_W = 20
   LVL_H = 15
   LVL_SIZE = (LVL_W * LVL_H)
   MAX_CRATES = 31
 
   def initialize(index)
-    @str = PSX::IO.load_file(filename(index))
+    @index = index
+    @str = PSX::IO.load_file(filename)
     @loaded = !@str.nil?
 
     return unless @loaded
@@ -36,6 +37,8 @@ class Level
     @crates_pos = []
     @player_pos = 0
     @offsets = { h: 0, v: 0 }
+    @target_steps = 0
+    @current_steps = 0
 
     draw_ground = false
     w = 0
@@ -85,7 +88,6 @@ class Level
 
   def move_player(direction)
     prev_pos = @player_pos
-    # moved = false
 
     case direction
     when DIR_UP
@@ -98,25 +100,17 @@ class Level
       @player_pos += 1
     end
 
-    # TODO: replace with detect
-    # @crates_pos.each do |crate_pos|
-    #   if @player_pos == crate_pos
-    #     moved = move_crate(crate_pos, direction)
-
-    #     @player_pos = prev_pos
-    #     break
-    #   end
-    # end
     crate_pos = @crates_pos.detect { |c| c == @player_pos }
     @player_pos = prev_pos unless move_crate(crate_pos, direction)
     @player_pos = prev_pos if @tiles[@player_pos ] == WALL_T
     @player_pos = prev_pos if @player_pos < 0 || @player_pos > LVL_SIZE
-    puts "moving player... #{@player_pos}"
 
-    @player_pos != prev_pos
+    moved = @player_pos != prev_pos
+    @current_steps += 1 if moved
+
+    moved
   end
 
-  # return true if crates has moved or if crate_pos is nil
   def move_crate(crate_pos, direction)
     return true if crate_pos.nil? # allow player movement if pos is nil
 
@@ -133,15 +127,12 @@ class Level
       crate_pos += 1
     end
 
-    # TODO: can use index instead of detect
     crate_pos = prev_pos if @crates_pos.detect { |c| c == crate_pos }
     crate_pos = prev_pos if @tiles[crate_pos] == WALL_T
     crate_pos = prev_pos if crate_pos < 0 || crate_pos > LVL_SIZE
 
     i = @crates_pos.index(prev_pos)
     @crates_pos[i] = crate_pos
-
-    puts "moving crates... #{@crates_pos.inspect}"
 
     crate_pos != prev_pos
   end
@@ -150,8 +141,40 @@ class Level
     @crates_pos.map { |c| @tiles[c] == TARGET_T }.all?(true)
   end
 
-  def filename(index)
-    idx = (index + 1).to_s.rjust(2, '0')
+  def render
+    PSX::Graph.clear_otag
+    draw_tile(PSX::Graph::PLAYER_IDX, @player_pos)
+
+    @crates_pos.each do |crate_pos|
+      ttype = @tiles[crate_pos] == TARGET_T ? PSX::Graph::CRATET_IDX : PSX::Graph::CRATEG_IDX
+      draw_tile(ttype, crate_pos)
+    end
+
+    @tiles.each_with_index do |tile, pos|
+      case tile
+      when VOID_T
+        next
+      when GROUND_T
+        draw_tile(PSX::Graph::GROUND_IDX, pos)
+      when TARGET_T
+        draw_tile(PSX::Graph::TARGET_IDX, pos)
+      when WALL_T
+        draw_tile(PSX::Graph::WALL_IDX, pos)
+      end
+    end
+
+    PSX::Graph.draw_tpage
+    PSX::Graph.print("LEVEL #{@index + 1} - STEP #{@current_steps}")
+
+    PSX::Graph.delay
+  end
+
+  def draw_tile(ttype, pos)
+    PSX::Graph.draw_tile(@offsets[:h], @offsets[:v], ttype, pos)
+  end
+
+  def filename
+    idx = (@index + 1).to_s.rjust(2, '0')
 
     "\\LEVELS\\LEVEL#{idx}.TXT;1"
   end
@@ -173,26 +196,32 @@ class Sokoban
   def initialize
     @current_level = 0
 
-    l = Level.new(@current_level)
-    l.debug
-    puts l.done?
+    @level = Level.new(@current_level)
   end
 
   def mainloop
     loop {
-
       PSX::Pad.poll
 
       if PSX::Pad.pressed?(PSX::Pad::KEY_UP)
-        puts 'key up'
+        @level.move_player(DIR_UP)
       elsif PSX::Pad.pressed?(PSX::Pad::KEY_DOWN)
-        puts 'key down'
+        @level.move_player(DIR_DOWN)
       elsif PSX::Pad.pressed?(PSX::Pad::KEY_LEFT)
-        puts 'key left'
+        @level.move_player(DIR_LEFT)
       elsif PSX::Pad.pressed?(PSX::Pad::KEY_RIGHT)
-        puts 'key right'
+        @level.move_player(DIR_RIGHT)
       end
 
+      @level = Level.new(@current_level) if PSX::Pad.pressed?(PSX::Pad::KEY_TRIANGLE)
+
+      if @level.done? # => next level
+        puts "well done!"
+        @current_level += 1
+        @level = Level.new(@current_level)
+      end
+
+      @level.render
     }
   end
 end
@@ -201,13 +230,4 @@ def from_ruby
   1337
 end
 
-Sokoban.new #.mainloop
-
-# puts "down..."
-# l.move_player(DIR_DOWN)
-# puts "up..."
-# l.move_player(DIR_UP)
-# puts "left..."
-# l.move_player(DIR_LEFT)
-# puts "right..."
-# l.move_player(DIR_RIGHT)
+Sokoban.new.mainloop
