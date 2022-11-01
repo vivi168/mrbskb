@@ -48,7 +48,7 @@ CFLAGS += -DMRB_NO_FLOAT -DMRB_NO_STDIO
 LDFLAGS := -g -T linker.ld
 MRUBY_LDFLAGS = -L$(PSYQ)/lib -L$(MRUBY)/build/playstation/lib
 
-SRC := level.c lvllut.c main.c input.c io.c renderer.c sokoban_rb.c
+SRC := main.c input.c io.c renderer.c sokoban_rb.c
 
 OBJ := $(SRC:.c=.o)
 
@@ -71,7 +71,7 @@ $(ELF): $(OBJ)
 	$(CC) -c $(CFLAGS) $<
 
 clean:
-	rm -f $(ELF) $(EXE) $(OBJ) $(ISO) sokoban.mrb sokoban_rb.h sokoban_rb.c
+	rm -f $(ELF) $(EXE) $(OBJ) $(ISO) sokoban.cue sokoban.mrb sokoban_rb.h sokoban_rb.c
 
 install:
 	cp sokoban.bin /mnt/c/Users/vbihl/Desktop/PSX_EXAMPLES

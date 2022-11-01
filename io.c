@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <libcd.h>
+
 #include "io.h"
 
 #include <mruby/string.h>
@@ -58,6 +59,8 @@ static mrb_value mrb_f_load_file(mrb_state* mrb, mrb_value self)
 void mrb_io_module_init(mrb_state *mrb, struct RClass* outer)
 {
     struct RClass *psx_io;
+
+    CdInit();
 
     psx_io = mrb_define_module_under(mrb, outer, "IO");
     mrb_define_module_function(mrb, psx_io, "load_file", mrb_f_load_file, MRB_ARGS_REQ(1));

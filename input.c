@@ -4,6 +4,17 @@
 
 #include "input.h"
 
+#define KEY_UP      4
+#define KEY_RIGHT   5
+#define KEY_DOWN    6
+#define KEY_LEFT    7
+#define KEY_TRIANGLE 12
+
+typedef struct input_manager_t {
+    unsigned int new_keystate, old_keystate;
+    unsigned int keys_pressed, keys_held, keys_released;
+} InputManager;
+
 typedef struct _PADTYPE
 {
     unsigned char   stat;
@@ -38,7 +49,7 @@ void iptm_init()
     input_manager.keys_released = 0;
 }
 
-void iptm_poll_events()
+static mrb_value mrb_f_poll(mrb_state* mrb, mrb_value self)
 {
     // Parse controller input
     pad = (PADTYPE*)padbuff[0];
@@ -62,44 +73,32 @@ void iptm_poll_events()
     }
 }
 
-int iptm_is_held(int k) {
-    return (1 << k) & input_manager.keys_held;
-}
-
-int iptm_is_pressed(int k) {
-    return (1 << k) & input_manager.keys_pressed;
-}
-
-int iptm_is_released(int k) {
-    return (1 << k) & input_manager.keys_released;
-}
-
-static mrb_value mrb_f_poll(mrb_state* mrb, mrb_value self)
-{
-    iptm_poll_events();
-}
-
 static mrb_value mrb_f_is_held(mrb_state* mrb, mrb_value self)
 {
-    // TODO
-    return mrb_nil_value();
+    mrb_value key = mrb_get_arg1(mrb);
+
+    int k = (1 << mrb_fixnum(key)) & input_manager.keys_held;
+
+    return mrb_bool_value(k > 0);
 }
 
 static mrb_value mrb_f_is_pressed(mrb_state* mrb, mrb_value self)
 {
     mrb_value key = mrb_get_arg1(mrb);
 
-    int k = iptm_is_pressed(mrb_fixnum(key));
+    int k = (1 << mrb_fixnum(key)) & input_manager.keys_pressed;
 
     return mrb_bool_value(k > 0);
 }
 
 static mrb_value mrb_f_is_released(mrb_state* mrb, mrb_value self)
 {
-    // TODO
-    return mrb_nil_value();
-}
+    mrb_value key = mrb_get_arg1(mrb);
 
+    int k = (1 << mrb_fixnum(key)) & input_manager.keys_released;
+
+    return mrb_bool_value(k > 0);
+}
 
 void mrb_pad_module_init(mrb_state* mrb, struct RClass *outer)
 {

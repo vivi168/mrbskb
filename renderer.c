@@ -11,8 +11,20 @@
 
 #include <mruby/string.h>
 
+// tiles indices in spritesheet
+#define GROUND_IDX 0
+#define TARGET_IDX 1
+#define WALL_IDX   2
+#define PLAYER_IDX 3
+#define CRATEG_IDX 4
+#define CRATET_IDX 5
+
 #define SCREEN_W 320
 #define SCREEN_H 240
+
+#define LVL_W 20
+#define LVL_H 15
+#define LVL_SIZE (LVL_W * LVL_H)
 
 #define TILE_SIZE 16
 #define OTLEN 8
@@ -38,7 +50,7 @@ DB db[2];
 DB *cdb;
 char *nextpri;
 
-void rdr_render_sprite(RECT*, int, int);
+void rdr_create_texture();
 
 void rdr_init()
 {
@@ -117,75 +129,6 @@ void rdr_create_texture()
     free(buff);
 }
 
-void rdr_render(Level* level)
-{
-    ClearOTagR(cdb->ot, OTLEN);
-
-    rdr_render_level(level);
-
-    FntPrint(cdb->fnt_id, "LEVEL %d - STEPS %d", level->index+1, level->steps);
-    FntFlush(cdb->fnt_id);
-}
-
-void rdr_render_level(Level* level)
-{
-    DR_TPAGE *tpage;
-    int i, c;
-    int hoff, voff;
-
-    hoff = level->hoff * TILE_SIZE;
-    voff = level->voff * TILE_SIZE;
-
-    // player
-    rdr_render_tile(hoff, voff, PLAYER_IDX, level->player_pos);
-
-    // crates
-    for (i = 0; i < level->crate_count; i++) {
-        c = level->crates_pos[i];
-
-        if (level->tiles[c] == TARGET_T)
-            rdr_render_tile(hoff, voff, CRATET_IDX, c);
-        else
-            rdr_render_tile(hoff, voff, CRATEG_IDX, c);
-    }
-
-    for (i = 0; i < LVL_SIZE; i++) {
-        switch (level->tiles[i]) {
-        case VOID_T: break;
-        case GROUND_T:
-            rdr_render_tile(hoff, voff, GROUND_IDX, i);
-            break;
-        case TARGET_T:
-            rdr_render_tile(hoff, voff, TARGET_IDX, i);
-            break;
-        case WALL_T:
-            rdr_render_tile(hoff, voff, WALL_IDX, i);
-            break;
-        }
-    }
-
-    tpage = (DR_TPAGE*)nextpri;
-    SetDrawTPage(tpage, 0, 1, texture.tpage);
-    addPrim(cdb->ot, tpage);
-    nextpri += sizeof(DR_TPAGE);
-}
-
-void rdr_render_tile(int hoff, int voff, int tile_index, int i)
-{
-    RECT src;
-    int dst_x, dst_y;
-
-    src.x = texture.u + (tile_index * TILE_SIZE);
-    src.y = texture.v;
-    src.w = TILE_SIZE;
-    src.h = TILE_SIZE;
-
-    dst_x = TILE_SIZE * (i % LVL_W) + hoff;
-    dst_y = TILE_SIZE * (i / LVL_W) + voff;
-
-    rdr_render_sprite(&src, dst_x, dst_y);
-}
-
 void rdr_render_sprite(RECT *src, int x, int y)
 {
     SPRT *sprt;
@@ -203,33 +146,23 @@ void rdr_render_sprite(RECT *src, int x, int y)
     nextpri += sizeof(SPRT);
 }
 
-unsigned int rdr_getticks()
-{
-    // TODO
-    // VSync(-1)
-    return 0;
-}
-
-void rdr_delay(int frame_start)
-{
-    DrawSync(0);
-    VSync(0);
-
-    PutDispEnv(&cdb->disp);
-    PutDrawEnv(&cdb->draw);
-
-    DrawOTag(&cdb->ot[OTLEN - 1]);
-
-    cdb = (cdb == &db[0]) ? &db[1] : &db[0];
-    nextpri = cdb->pribuff;
-}
-
 static mrb_value mrb_f_draw_tile(mrb_state* mrb, mrb_value self)
 {
     mrb_int hoff, voff, tile_index, pos;
+    RECT src;
+    int dst_x, dst_y;
 
     mrb_get_args(mrb, "iiii", &hoff, &voff, &tile_index, &pos);
-    rdr_render_tile(hoff * TILE_SIZE, voff * TILE_SIZE, tile_index, pos);
+
+    src.x = texture.u + (tile_index * TILE_SIZE);
+    src.y = texture.v;
+    src.w = TILE_SIZE;
+    src.h = TILE_SIZE;
+
+    dst_x = TILE_SIZE * ((pos % LVL_W) + hoff);
+    dst_y = TILE_SIZE * ((pos / LVL_W) + voff);
+
+    rdr_render_sprite(&src, dst_x, dst_y);
 
     return mrb_nil_value();
 }
@@ -270,7 +203,16 @@ static mrb_value mrb_f_print(mrb_state* mrb, mrb_value self)
 
 static mrb_value mrb_f_delay(mrb_state* mrb, mrb_value self)
 {
-    rdr_delay(0);
+    DrawSync(0);
+    VSync(0);
+
+    PutDispEnv(&cdb->disp);
+    PutDrawEnv(&cdb->draw);
+
+    DrawOTag(&cdb->ot[OTLEN - 1]);
+
+    cdb = (cdb == &db[0]) ? &db[1] : &db[0];
+    nextpri = cdb->pribuff;
 
     return mrb_nil_value();
 }
