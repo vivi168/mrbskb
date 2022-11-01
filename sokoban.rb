@@ -179,7 +179,21 @@ class Sokoban
   end
 
   def mainloop
-    loop { }
+    loop {
+
+      PSX::Pad.poll
+
+      if PSX::Pad.pressed?(PSX::Pad::KEY_UP)
+        puts 'key up'
+      elsif PSX::Pad.pressed?(PSX::Pad::KEY_DOWN)
+        puts 'key down'
+      elsif PSX::Pad.pressed?(PSX::Pad::KEY_LEFT)
+        puts 'key left'
+      elsif PSX::Pad.pressed?(PSX::Pad::KEY_RIGHT)
+        puts 'key right'
+      end
+
+    }
   end
 end
 
@@ -187,7 +201,7 @@ def from_ruby
   1337
 end
 
-Sokoban.new
+Sokoban.new #.mainloop
 
 # puts "down..."
 # l.move_player(DIR_DOWN)

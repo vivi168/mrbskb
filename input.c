@@ -74,19 +74,45 @@ int iptm_is_released(int k) {
     return (1 << k) & input_manager.keys_released;
 }
 
+static mrb_value mrb_f_poll(mrb_state* mrb, mrb_value self)
+{
+    iptm_poll_events();
+}
+
+static mrb_value mrb_f_is_held(mrb_state* mrb, mrb_value self)
+{
+    // TODO
+    return mrb_nil_value();
+}
+
+static mrb_value mrb_f_is_pressed(mrb_state* mrb, mrb_value self)
+{
+    mrb_value key = mrb_get_arg1(mrb);
+
+    int k = iptm_is_pressed(mrb_fixnum(key));
+
+    return mrb_bool_value(k > 0);
+}
+
+static mrb_value mrb_f_is_released(mrb_state* mrb, mrb_value self)
+{
+    // TODO
+    return mrb_nil_value();
+}
+
+
 void mrb_pad_module_init(mrb_state* mrb, struct RClass *outer)
 {
-
     struct RClass *psx_pad;
 
     psx_pad = mrb_define_module_under(mrb, outer, "Pad");
 
-    // iptm_init()
+    // TODO: iptm_init(); here
 
-    /* mrb_define_module_function(mrb, psx_pad, "poll", mrb_f_poll, MRB_ARGS_NONE()); */
-    /* mrb_define_module_function(mrb, psx_pad, "held?", mrb_f_is_held, MRB_ARGS_REQ(1)); */
-    /* mrb_define_module_function(mrb, psx_pad, "pressed?", mrb_f_is_pressed, MRB_ARGS_REQ(1)); */
-    /* mrb_define_module_function(mrb, psx_pad, "released?", mrb_f_is_released, MRB_ARGS_REQ(1)); */
+    mrb_define_module_function(mrb, psx_pad, "poll", mrb_f_poll, MRB_ARGS_NONE());
+    mrb_define_module_function(mrb, psx_pad, "held?", mrb_f_is_held, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, psx_pad, "pressed?", mrb_f_is_pressed, MRB_ARGS_REQ(1));
+    mrb_define_module_function(mrb, psx_pad, "released?", mrb_f_is_released, MRB_ARGS_REQ(1));
 
     mrb_define_const(mrb, psx_pad, "KEY_UP", mrb_int_value(mrb, KEY_UP));
     mrb_define_const(mrb, psx_pad, "KEY_RIGHT", mrb_int_value(mrb, KEY_RIGHT));

@@ -101,6 +101,7 @@ void mrb_helper_init(mrb_state *mrb)
     psx = mrb_define_module(mrb, "PSX");
 
     mrb_io_module_init(mrb, psx);
+    mrb_pad_module_init(mrb, psx);
 }
 
 void print_mrb_exception(mrb_state *mrb)
