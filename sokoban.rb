@@ -138,6 +138,7 @@ class Level
 
   def render
     PSX::Graph.clear_otag
+
     draw_tile(PSX::Graph::PLAYER_IDX, @player_pos)
 
     @crates_pos.each do |crate_pos|
@@ -219,10 +220,6 @@ class Sokoban
       @level.render
     }
   end
-end
-
-def from_ruby
-  1337
 end
 
 Sokoban.new.mainloop
