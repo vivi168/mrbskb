@@ -18,11 +18,6 @@ class Level
   PLAYER_CHAR  = '@'
   NEWLINE_CHAR = "\n"
 
-  LVL_W = 20
-  LVL_H = 15
-  LVL_SIZE = (LVL_W * LVL_H)
-  MAX_CRATES = 31
-
   def initialize(index)
     @index = index
     @str = PSX::IO.load_file(filename)
@@ -33,7 +28,7 @@ class Level
     puts @str
 
     definition = @str.split('')
-    @tiles = [VOID_T] * LVL_SIZE
+    @tiles = [VOID_T] * PSX::Graph::LVL_SIZE
     @crates_pos = []
     @player_pos = 0
     @offsets = { h: 0, v: 0 }
@@ -72,7 +67,7 @@ class Level
         h += 1
         draw_ground = false
 
-        k += LVL_W - l
+        k += PSX::Graph::LVL_W - l
         l = 0
         next
       end
@@ -81,7 +76,7 @@ class Level
       k += 1
     end
 
-    @offsets = { h: (LVL_W  - w) / 2, v: (LVL_H - h) / 2 }
+    @offsets = { h: (PSX::Graph::LVL_W  - w) / 2, v: (PSX::Graph::LVL_H - h) / 2 }
 
     true
   end
@@ -91,9 +86,9 @@ class Level
 
     case direction
     when DIR_UP
-      @player_pos -= LVL_W
+      @player_pos -= PSX::Graph::LVL_W
     when DIR_DOWN
-      @player_pos += LVL_W
+      @player_pos += PSX::Graph::LVL_W
     when DIR_LEFT
       @player_pos -= 1
     when DIR_RIGHT
@@ -103,7 +98,7 @@ class Level
     crate_pos = @crates_pos.detect { |c| c == @player_pos }
     @player_pos = prev_pos unless move_crate(crate_pos, direction)
     @player_pos = prev_pos if @tiles[@player_pos ] == WALL_T
-    @player_pos = prev_pos if @player_pos < 0 || @player_pos > LVL_SIZE
+    @player_pos = prev_pos if @player_pos < 0 || @player_pos > PSX::Graph::LVL_SIZE
 
     moved = @player_pos != prev_pos
     @current_steps += 1 if moved
@@ -118,9 +113,9 @@ class Level
 
     case direction
     when DIR_UP
-      crate_pos -= LVL_W
+      crate_pos -= PSX::Graph::LVL_W
     when DIR_DOWN
-      crate_pos += LVL_W
+      crate_pos += PSX::Graph::LVL_W
     when DIR_LEFT
       crate_pos -= 1
     when DIR_RIGHT
@@ -129,7 +124,7 @@ class Level
 
     crate_pos = prev_pos if @crates_pos.detect { |c| c == crate_pos }
     crate_pos = prev_pos if @tiles[crate_pos] == WALL_T
-    crate_pos = prev_pos if crate_pos < 0 || crate_pos > LVL_SIZE
+    crate_pos = prev_pos if crate_pos < 0 || crate_pos > PSX::Graph::LVL_SIZE
 
     i = @crates_pos.index(prev_pos)
     @crates_pos[i] = crate_pos

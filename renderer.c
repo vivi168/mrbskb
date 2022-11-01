@@ -232,6 +232,10 @@ void mrb_graph_module_init(mrb_state *mrb, struct RClass* outer)
     mrb_define_const(mrb, psx_graph, "CRATEG_IDX", mrb_int_value(mrb, CRATEG_IDX));
     mrb_define_const(mrb, psx_graph, "CRATET_IDX", mrb_int_value(mrb, CRATET_IDX));
 
+    mrb_define_const(mrb, psx_graph, "LVL_W", mrb_int_value(mrb, LVL_W));
+    mrb_define_const(mrb, psx_graph, "LVL_H", mrb_int_value(mrb, LVL_H));
+    mrb_define_const(mrb, psx_graph, "LVL_SIZE", mrb_int_value(mrb, LVL_SIZE));
+
     mrb_define_module_function(mrb, psx_graph, "draw_tile", mrb_f_draw_tile, MRB_ARGS_REQ(4));
     mrb_define_module_function(mrb, psx_graph, "draw_tpage", mrb_f_draw_tpage, MRB_ARGS_NONE());
     mrb_define_module_function(mrb, psx_graph, "clear_otag", mrb_f_clear_otag, MRB_ARGS_NONE());
