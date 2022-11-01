@@ -71,6 +71,8 @@ static mrb_value mrb_f_poll(mrb_state* mrb, mrb_value self)
             input_manager.keys_released = input_manager.old_keystate ^ input_manager.new_keystate;
         }
     }
+
+    return mrb_nil_value();
 }
 
 static mrb_value mrb_f_is_held(mrb_state* mrb, mrb_value self)

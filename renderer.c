@@ -87,11 +87,9 @@ void rdr_init()
 void rdr_create_texture()
 {
     u_long file_size;
-    int i;
     char *buff;
 
     TIM_IMAGE   *image;
-    u_int       *filebuff;
 
     buff = load_file("\\SKB16.TIM;1", &file_size);
     if (buff == NULL) {
