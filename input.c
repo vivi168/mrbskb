@@ -107,7 +107,7 @@ void mrb_pad_module_init(mrb_state* mrb, struct RClass *outer)
 
     psx_pad = mrb_define_module_under(mrb, outer, "Pad");
 
-    // TODO: iptm_init(); here
+    iptm_init();
 
     mrb_define_module_function(mrb, psx_pad, "poll", mrb_f_poll, MRB_ARGS_NONE());
     mrb_define_module_function(mrb, psx_pad, "held?", mrb_f_is_held, MRB_ARGS_REQ(1));

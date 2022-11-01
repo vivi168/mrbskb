@@ -279,7 +279,7 @@ void mrb_graph_module_init(mrb_state *mrb, struct RClass* outer)
 {
     struct RClass *psx_graph;
 
-    // rdr_init();
+    rdr_init();
 
     psx_graph = mrb_define_module_under(mrb, outer, "Graph");
 

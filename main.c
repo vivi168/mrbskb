@@ -57,15 +57,6 @@ void mainloop()
     }
 }
 
-static mrb_value mrb_f_foobar(mrb_state *mrb, mrb_value self)
-{
-    mrb_int i;
-
-    mrb_get_args(mrb, "i", &i);
-
-    return mrb_fixnum_value(i);
-}
-
 void puts_mrb_str(const char* s, int len)
 {
     for (int i = 0; i < (int)len; i++) {
@@ -94,9 +85,7 @@ void mrb_helper_init(mrb_state *mrb)
 {
     struct RClass *psx;
 
-    mrb_define_method(mrb, mrb->kernel_module, "foobar", mrb_f_foobar, MRB_ARGS_REQ(1));
     mrb_define_method(mrb, mrb->kernel_module, "puts", mrb_f_puts, MRB_ARGS_REQ(1));
-
 
     psx = mrb_define_module(mrb, "PSX");
 
@@ -116,28 +105,18 @@ void print_mrb_exception(mrb_state *mrb)
 int main(int argc, char** argv)
 {
     mrb_state *mrb;
-    mrb_value v;
 
     InitHeap((void*)&heap, HEAP_SIZE);
     CdInit();
-
-    rdr_init();
-    iptm_init();
-
-    printf("[INFO]: init done !\n");
 
     lvl_init(&level, 0);
     printf("[INFO]: level init done !\n");
 
     //----
-
     mrb = mrb_open();
     mrb_helper_init(mrb);
 
     mrb_load_irep(mrb, sokoban_rb);
-
-    v = mrb_funcall(mrb, mrb_top_self(mrb), "from_ruby", 0);
-    printf("from ruby: %d\n", mrb_fixnum(v));
 
     print_mrb_exception(mrb);
     //----
