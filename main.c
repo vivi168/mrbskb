@@ -8,11 +8,10 @@
 #include <mruby/string.h>
 #include <mruby/internal.h>
 #include <mruby/irep.h>
-#include <mruby/compile.h>
 
-#include "renderer.h"
 #include "io.h"
 #include "input.h"
+#include "renderer.h"
 #include "sokoban_rb.h"
 
 #define HEAP_SIZE (1024 * 1024)
