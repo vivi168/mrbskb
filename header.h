@@ -1,3 +1,6 @@
+#ifndef __HEADER_H
+#define __HEADER_H
+
 extern unsigned long __SN_ENTRY_POINT;
 extern unsigned long __exe_start__;
 extern unsigned long __exe_size__;
@@ -18,3 +21,5 @@ const psx_header hdr __attribute__((section(".hdr"))) = {
 	.load_addr = (unsigned long)&__exe_start__,
 	.load_size = (unsigned long)&__exe_size__,
 };
+
+#endif
