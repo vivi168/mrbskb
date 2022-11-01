@@ -11,7 +11,7 @@ MRuby::CrossBuild.new("playstation") do |conf|
   conf.cc do |cc|
     cc.command = "mipsel-none-elf-gcc"
     cc.include_paths << ["#{PSYQ_PATH}/include"]
-    cc.flags << %w( -g -G0 -ffreestanding -nostdlib)
+    cc.flags << %w(-g -O2 -G0 -ffreestanding -nostdlib -mno-unaligned-access)
     cc.compile_options = %(%{flags} -o "%{outfile}" -c "%{infile}")
     cc.defines << "MRB_NO_FLOAT"
     cc.defines << "MRB_NO_STDIO"

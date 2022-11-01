@@ -43,9 +43,9 @@ LIB := \
 	$(PSYQ)/lib/libapi.a \
 	$(PSYQ)/lib/extra.a
 
-CFLAGS := -g -G0 -ffreestanding -nostdlib -Wall -Wundef -Werror-implicit-function-declaration -Wwrite-strings $(INC)
+CFLAGS := -g -O2 -G0 -ffreestanding -nostdlib -mno-unaligned-access -Wall -Wundef -Werror-implicit-function-declaration -Wwrite-strings $(INC)
 CFLAGS += -DMRB_NO_FLOAT -DMRB_NO_STDIO
-LDFLAGS := -g -T linker.ld
+LDFLAGS := -g -O2 -T linker.ld
 MRUBY_LDFLAGS = -L$(PSYQ)/lib -L$(MRUBY)/build/playstation/lib
 
 SRC := main.c input.c io.c renderer.c sokoban_rb.c
