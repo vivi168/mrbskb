@@ -30,35 +30,6 @@ MRuby::CrossBuild.new("playstation") do |conf|
     cxx.compile_options = conf.cc.compile_options.dup
   end
 
-  # Linker
-  conf.linker do |linker|
-    linker.command = "mipsel-none-elf-gcc"
-    linker.flags << %w(-g -ffreestanding -nostdlib)
-    linker.libraries << [
-      "libcard.a",
-      "libpress.a",
-      "libgpu.a",
-      "libgs.a",
-      "libgte.a",
-      "libcd.a",
-      "libetc.a",
-      "libsn.a",
-      "libsnd.a",
-      "libspu.a",
-      "libmath.a",
-      "libcomb.a",
-      "libcard.a",
-      "libtap.a",
-      "libsio.a",
-      "libpad.a",
-      "libc2.a",
-      "libapi.a",
-      "extra.a"
-    ]
-    linker.flags_after_libraries << '-lgcc'
-    linker.library_paths << ["#{PSYQ_PATH}/lib"]
-  end
-
   conf.archiver do |archiver|
     archiver.command = "mipsel-none-elf-ar"
     archiver.archive_options = 'rcs "%{outfile}" %{objs}'
