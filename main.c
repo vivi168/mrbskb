@@ -66,7 +66,7 @@ int main(int argc, char** argv)
 {
     mrb_state *mrb;
 
-    InitHeap((void*)&heap, HEAP_SIZE);
+    InitHeap3((void*)&heap, HEAP_SIZE);
 
     mrb = mrb_open();
     mrb_helper_init(mrb);

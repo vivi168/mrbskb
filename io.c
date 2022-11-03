@@ -23,7 +23,7 @@ char* load_file(const char* filename, u_long *size)
 
     printf("[INFO]: found %s\n", filename);
     sectors = (file.size + 2047) / 2048;
-    buff = (char*)malloc(2048 * sectors);
+    buff = (char*)malloc3(2048 * sectors);
     CdControl(CdlSetloc, (u_char*)&file.pos, 0);
     CdRead(sectors, (u_long*)buff, CdlModeSpeed);
     printf("[INFO]: sectors: %d, file size: %d\n", sectors, file.size);
@@ -52,7 +52,7 @@ static mrb_value mrb_f_load_file(mrb_state* mrb, mrb_value self)
 
     mrb_value str = mrb_str_new(mrb, buff, file_size);
 
-    free(buff);
+    free3(buff);
     return str;
 }
 
