@@ -8,9 +8,11 @@ You need:
 
 - mipsel-none-elf gcc and binutils
 - mkpsxiso
-- psyq2elf (for convert the Psy-Q library to elf format and use it with modern gcc toolchain)
+- psyq2elf (to convert the Psy-Q library to elf format and use it with modern gcc toolchain)
 - the patch for the Psy-Q header files
 - the playstation.rb build_config
+
+First, convert Psy-Q to elf. Then apply the patch to update the headers files, and compile `extra.a`
 
 then, clone mruby
 
