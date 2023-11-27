@@ -9,3 +9,4 @@
 
 *.mrb
 sokoban_rb.*
+.DS_Store
