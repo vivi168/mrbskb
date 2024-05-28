@@ -2,6 +2,9 @@
 
 Sokoban on PSX, but all the game logic is implemented using mruby.
 
+![image](https://github.com/vivi168/mrbskb/assets/1566422/aefc32ea-b8e4-4482-bb24-7d807f263811)
+
+
 ## Building
 
 You need:
